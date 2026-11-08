@@ -50,7 +50,7 @@ export default function App() {
         <Route path="/resume" element={<ResumeBuilder />} />
         <Route path="/resumes" element={<Private><Resumes /></Private>} />
         <Route path="/interview" element={<Private><Interview /></Private>} />
-        <Route path="/mentors" element={<Private><Mentors /></Private>} />
+        <Route path="/mentors" element={<Private role="student"><Mentors /></Private>} />
         <Route path="/mentors/:id/chat" element={<Private role="student"><CoffeeChat /></Private>} />
         <Route path="/mentor/signup" element={<Private role="mentor"><MentorSignup /></Private>} />
         <Route path="/mentor/dashboard" element={<Private role="mentor"><MentorDashboard /></Private>} />

@@ -23,9 +23,6 @@ export default function Mentors() {
   useEffect(() => { const t = setTimeout(() => setQuery(q.trim()), 300); return () => clearTimeout(t); }, [q]);
   const res = useLoad(() => api.mentors({ q: query, industry }), [query, industry]);
   const student = user?.role === 'student';
-  // A mentor who signed up but has not made a card yet is asked to finish it.
-  const mine = useLoad(() => (user?.role === 'mentor' ? api.mentors() : Promise.resolve(null)), [user?.id]);
-  const needsCard = user?.role === 'mentor' && mine.data && !mine.data.items.some((m) => m.userId === user.id);
 
   return (
     <main className="page" style={{ maxWidth: 1100, gap: 24 }}>
@@ -48,17 +45,10 @@ export default function Mentors() {
               <span className="muted" style={{ fontSize: 14 }}>{[m.headline, m.company].filter(Boolean).join(' · ')}</span>
               <MentorFacts m={m} />
               {student && <Link to={`/mentors/${m.id}/chat`} className="btn small" style={{ alignSelf: 'flex-start', marginTop: 6 }}>Request a coffee chat</Link>}
-              {user && m.userId === user.id && <Link to="/mentor/signup" className="btn outline small" style={{ alignSelf: 'flex-start', marginTop: 6 }}>Edit my card</Link>}
             </div>
           </article>
         ))}
       </div>
-      {needsCard && (
-        <section className="card tint row between">
-          <div><h2 style={{ fontSize: 22 }}>Your mentor card is not finished</h2><p className="muted" style={{ marginTop: 4 }}>Students can only find you once your card is filled in.</p></div>
-          <Link to="/mentor/signup" className="btn">Finish up your mentor card</Link>
-        </section>
-      )}
     </main>
   );
 }

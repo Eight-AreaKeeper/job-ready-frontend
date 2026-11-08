@@ -25,9 +25,9 @@ test('mentor card, coffee chat request, accept, complete, points', async ({ brow
   await expect(nav.getByRole('link')).toHaveText(['About us', 'Resume', 'Opportunities', 'Dashboard']);
   await expect(mp.getByRole('region', { name: 'My mentor profile' })).toContainText('Senior Data Engineer');
   await expect(mp.getByRole('link', { name: 'Edit my card' })).toBeVisible();
+  // The list of all mentors is for students; a mentor is sent to their dashboard
   await mp.goto('/mentors');
-  await expect(mp.getByText('Finish up your mentor card')).toHaveCount(0);
-  await mp.goto('/mentor/dashboard');
+  await expect(mp).toHaveURL(/\/mentor\/dashboard/);
   await expect(mp.locator('.stat').first()).toContainText('0');
 
   // Mentors see Opportunities exactly as students do
