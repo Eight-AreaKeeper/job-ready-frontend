@@ -12,11 +12,18 @@ export default function Header() {
       <Link to="/" className="logo" aria-label="Job Ready home">Job <span>Ready</span><Sparkle /></Link>
       <nav aria-label="Main" className="main-nav">
         <NavLink to="/about">About us</NavLink>
-        <NavLink to="/resume" className={({ isActive }) => (isActive || location.pathname.startsWith('/resumes') ? 'active' : '')}>Resume</NavLink>
-        <NavLink to="/opportunities" className={({ isActive }) => (isActive || location.pathname.startsWith('/events') ? 'active' : '')}>Opportunities</NavLink>
-        {user?.role === 'mentor'
-          ? <NavLink to="/mentor/dashboard" className={({ isActive }) => (isActive || location.pathname.startsWith('/mentor') ? 'active' : '')}>Dashboard</NavLink>
-          : <NavLink to="/mentors" className={({ isActive }) => (isActive || location.pathname.startsWith('/mentor') ? 'active' : '')}>Mentors</NavLink>}
+        {user?.role === 'mentor' ? (
+          <>
+            <NavLink to="/events">Events</NavLink>
+            <NavLink to="/mentor/dashboard" className={({ isActive }) => (isActive || location.pathname.startsWith('/mentor') ? 'active' : '')}>Dashboard</NavLink>
+          </>
+        ) : (
+          <>
+            <NavLink to="/resume" className={({ isActive }) => (isActive || location.pathname.startsWith('/resumes') ? 'active' : '')}>Resume</NavLink>
+            <NavLink to="/opportunities" className={({ isActive }) => (isActive || location.pathname.startsWith('/events') ? 'active' : '')}>Opportunities</NavLink>
+            <NavLink to="/mentors" className={({ isActive }) => (isActive || location.pathname.startsWith('/mentor') ? 'active' : '')}>Mentors</NavLink>
+          </>
+        )}
       </nav>
       {user ? (
         <div className="header-user">

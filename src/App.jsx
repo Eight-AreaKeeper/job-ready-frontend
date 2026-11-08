@@ -20,6 +20,12 @@ import CoffeeChat from './pages/CoffeeChat.jsx';
 import MentorSignup from './pages/MentorSignup.jsx';
 import MentorDashboard from './pages/MentorDashboard.jsx';
 
+/** Pages for job seekers: open to visitors and students, mentors go to their dashboard. */
+function NotMentor({ children }) {
+  const { user } = useAuth();
+  return user?.role === 'mentor' ? <Navigate to="/mentor/dashboard" replace /> : children;
+}
+
 /** Only signed-in users (optionally with one role) can open the page; others go to sign in. */
 function Private({ role, children }) {
   const { user, ready } = useAuth();
@@ -40,16 +46,16 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/signin" element={<SignIn />} />
-        <Route path="/profile/setup" element={<Private><ProfileSetup /></Private>} />
-        <Route path="/profile" element={<Private><Profile /></Private>} />
-        <Route path="/opportunities" element={<Private><Opportunities /></Private>} />
-        <Route path="/opportunities/recommended" element={<Private><Matches /></Private>} />
-        <Route path="/opportunities/:id" element={<Private><OpportunityDetail /></Private>} />
-        <Route path="/opportunities/:id/apply" element={<Private><Apply /></Private>} />
+        <Route path="/profile/setup" element={<Private role="student"><ProfileSetup /></Private>} />
+        <Route path="/profile" element={<Private role="student"><Profile /></Private>} />
+        <Route path="/opportunities" element={<Private role="student"><Opportunities /></Private>} />
+        <Route path="/opportunities/recommended" element={<Private role="student"><Matches /></Private>} />
+        <Route path="/opportunities/:id" element={<Private role="student"><OpportunityDetail /></Private>} />
+        <Route path="/opportunities/:id/apply" element={<Private role="student"><Apply /></Private>} />
         <Route path="/events" element={<Private><Events /></Private>} />
-        <Route path="/resume" element={<ResumeBuilder />} />
-        <Route path="/resumes" element={<Private><Resumes /></Private>} />
-        <Route path="/interview" element={<Private><Interview /></Private>} />
+        <Route path="/resume" element={<NotMentor><ResumeBuilder /></NotMentor>} />
+        <Route path="/resumes" element={<Private role="student"><Resumes /></Private>} />
+        <Route path="/interview" element={<Private role="student"><Interview /></Private>} />
         <Route path="/mentors" element={<Private role="student"><Mentors /></Private>} />
         <Route path="/mentors/:id/chat" element={<Private role="student"><CoffeeChat /></Private>} />
         <Route path="/mentor/signup" element={<Private role="mentor"><MentorSignup /></Private>} />

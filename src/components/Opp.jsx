@@ -1,9 +1,14 @@
 import { Link, NavLink } from 'react-router-dom';
+import { useAuth } from '../auth.jsx';
 import { cap, fmtDate } from '../format.js';
 import { ArrowOut } from './ui.jsx';
 
-/** Big band with the Job opportunities / Events switch. */
+/** Big band with the Job opportunities / Events switch. Mentors only get events, so no switch. */
 export function OppBand({ active }) {
+  const { user } = useAuth();
+  if (user?.role === 'mentor') {
+    return <section className="band center"><div className="band-inner"><h1>Career events</h1></div></section>;
+  }
   return (
     <section className="band center">
       <div className="band-inner">

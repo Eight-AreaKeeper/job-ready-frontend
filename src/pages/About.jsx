@@ -31,7 +31,7 @@ export default function About() {
                 ))}
               </ol>
             </section>
-            <Link to={user ? '/opportunities' : '/signin'} className="btn" style={{ alignSelf: 'flex-start' }}>Get started</Link>
+            <Link to={!user ? '/signin' : user.role === 'mentor' ? '/mentor/dashboard' : '/opportunities'} className="btn" style={{ alignSelf: 'flex-start' }}>Get started</Link>
           </div>
           <div style={{ display: 'flex', justifyContent: 'center' }}>
             <img src="/about.jpg" alt="A diverse group of professionals from many fields" style={{ width: '100%', maxWidth: 480, aspectRatio: '6 / 5', objectFit: 'cover', borderRadius: '50%' }} />
