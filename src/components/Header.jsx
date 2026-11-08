@@ -6,11 +6,10 @@ export default function Header() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const home = user ? (user.role === 'mentor' ? '/mentor/dashboard' : '/opportunities/recommended') : '/';
   const meLink = user && (user.role === 'mentor' ? '/mentor/dashboard' : '/profile');
   return (
     <header className="site-header">
-      <Link to={user ? home : '/'} className="logo" aria-label="Job Ready home">Job <span>Ready</span><Sparkle /></Link>
+      <Link to="/" className="logo" aria-label="Job Ready home">Job <span>Ready</span><Sparkle /></Link>
       <nav aria-label="Main" className="main-nav">
         <NavLink to="/about">About us</NavLink>
         <NavLink to="/resume" className={({ isActive }) => (isActive || location.pathname.startsWith('/resumes') ? 'active' : '')}>Resume</NavLink>
