@@ -1,16 +1,12 @@
 import { useEffect, useState } from 'react';
 import { api } from '../api.js';
-import { useAuth } from '../auth.jsx';
+import { Link } from 'react-router-dom';
+import { useEventRegistrations } from '../eventRegistration.js';
 import { OppBand } from '../components/Opp.jsx';
 import { Chip, ErrorBox, Loading, SearchIcon, useLoad } from '../components/ui.jsx';
 import { fmtTime, KIND_LABELS } from '../format.js';
 
 const KINDS = [['', 'All'], ...Object.entries(KIND_LABELS)];
-
-// Registrations are kept in this browser only (there is no registration API yet).
-function loadRegistered(key) {
-  try { return JSON.parse(localStorage.getItem(key) || '[]'); } catch { return []; }
-}
 
 export default function Events() {
   const [q, setQ] = useState('');
@@ -19,14 +15,7 @@ export default function Events() {
   const [kind, setKind] = useState('');
   useEffect(() => { const t = setTimeout(() => setQuery(q.trim()), 300); return () => clearTimeout(t); }, [q]);
   const res = useLoad(() => api.events({ q: query, format, kind, limit: 50 }), [query, format, kind]);
-  const { user } = useAuth();
-  const storeKey = `jobready.events.${user?.id || 'guest'}`;
-  const [registered, setRegistered] = useState(() => loadRegistered(storeKey));
-  function register(id) {
-    const next = [...new Set([...registered, id])];
-    setRegistered(next);
-    try { localStorage.setItem(storeKey, JSON.stringify(next)); } catch { /* private mode: keep it for this visit */ }
-  }
+  const { isRegistered, register } = useEventRegistrations();
 
   return (
     <>
@@ -62,11 +51,14 @@ export default function Events() {
                     </div>
                     {e.description && <p style={{ fontSize: 14, lineHeight: 1.6, color: 'var(--body)' }}>{e.description}</p>}
                     <div className="chips" style={{ gap: 6 }}><span className="tag">{KIND_LABELS[e.kind] || e.kind}</span><span className="tag">{e.format === 'online' ? 'Online' : 'In person'}</span></div>
-                    {registered.includes(e.id) && <p role="status" className="registered">✓ Registered successfully. See you there!</p>}
+                    {isRegistered(e.id) && <p role="status" className="registered">✓ Registered successfully. See you there!</p>}
                   </div>
-                  {registered.includes(e.id)
-                    ? <button type="button" className="btn small" disabled>Registered</button>
-                    : <button type="button" className="btn small" onClick={() => register(e.id)}>Register</button>}
+                  <div className="event-actions">
+                    {isRegistered(e.id)
+                      ? <button type="button" className="btn small" disabled>Registered</button>
+                      : <button type="button" className="btn small" onClick={() => register(e.id)}>Register</button>}
+                    <Link to={`/events/${e.id}`} className="btn ghost small">View</Link>
+                  </div>
                 </article>
               );
             })}

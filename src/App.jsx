@@ -12,6 +12,7 @@ import Matches from './pages/Matches.jsx';
 import OpportunityDetail from './pages/OpportunityDetail.jsx';
 import Apply from './pages/Apply.jsx';
 import Events from './pages/Events.jsx';
+import EventDetail from './pages/EventDetail.jsx';
 import ResumeBuilder from './pages/ResumeBuilder.jsx';
 import Resumes from './pages/Resumes.jsx';
 import Interview from './pages/Interview.jsx';
@@ -53,6 +54,7 @@ export default function App() {
         <Route path="/opportunities/:id" element={<Private role="student"><OpportunityDetail /></Private>} />
         <Route path="/opportunities/:id/apply" element={<Private role="student"><Apply /></Private>} />
         <Route path="/events" element={<Private><Events /></Private>} />
+        <Route path="/events/:id" element={<Private><EventDetail /></Private>} />
         <Route path="/resume" element={<NotMentor><ResumeBuilder /></NotMentor>} />
         <Route path="/resumes" element={<Private role="student"><Resumes /></Private>} />
         <Route path="/interview" element={<Private role="student"><Interview /></Private>} />

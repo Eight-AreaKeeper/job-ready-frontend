@@ -68,6 +68,7 @@ export const api = {
   opportunity: (id) => request('GET', `/opportunities/${encodeURIComponent(id)}`),
 
   events: (q) => request('GET', '/events', { query: q }),
+  event: (id) => request('GET', `/events/${id}`),
 
   resumes: () => request('GET', '/resumes'),
   resume: (id) => request('GET', `/resumes/${encodeURIComponent(id)}`),

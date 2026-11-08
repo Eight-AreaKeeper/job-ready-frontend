@@ -207,3 +207,5 @@ legend { font-size: 14px; font-weight: 600; color: var(--plum); margin-bottom: 8
 
 /* Event registration confirmation */
 .registered { margin: 4px 0 0; padding: 8px 12px; border-radius: 8px; background: var(--ok-bg); color: var(--ok); font-size: 14px; font-weight: 600; }
+.event-actions { display: flex; flex-direction: column; gap: 8px; min-width: 120px; }
+.event-actions .btn { text-align: center; justify-content: center; }

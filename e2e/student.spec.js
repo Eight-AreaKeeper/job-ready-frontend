@@ -116,6 +116,14 @@ test('student: register, questionnaire, profile, resume, jobs, apply, events, in
   await expect(page).toHaveURL(/\/events/);
   await expect(firstEvent.getByRole('status')).toHaveText(/Registered successfully/);
   await expect(firstEvent.getByRole('button', { name: 'Registered' })).toBeDisabled();
+  // View opens the event's own page, which knows it is registered
+  const eventTitle = await firstEvent.locator('h2').textContent();
+  await firstEvent.getByRole('link', { name: 'View' }).click();
+  await expect(page).toHaveURL(/\/events\/[^/]+$/);
+  await expect(page.getByRole('heading', { name: eventTitle })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Registered' })).toBeDisabled();
+  await page.getByRole('link', { name: '← Back to events' }).click();
+  await expect(page.locator('.event').first()).toBeVisible();
   // Soonest first
   const days = await page.locator('.event .date-block').evaluateAll((els) => els.map((e) => e.textContent));
   expect(days.length).toBeGreaterThan(0);
