@@ -12,11 +12,19 @@ test('student: register, questionnaire, profile, resume, jobs, apply, events, in
   await expect(page.getByRole('heading', { name: 'Make a Profile' })).toBeVisible();
 
   // 2. Answer the questions from the back end
-  await page.getByLabel('Which skills are you most confident in?').fill('Java, Spring Boot, SQL, Docker');
+  await expect(page.getByLabel('Email')).toHaveValue(/@/);
+  await page.getByRole('button', { name: "Bachelor's" }).click();
+  await page.getByLabel('College or university').fill('University of Calgary');
+  await page.getByLabel('Program or major').fill('Computer Science');
+  await page.getByLabel(/Current year of study/).fill('3rd year');
+  await page.getByLabel(/Graduation year/).fill('2027');
+  await page.getByLabel('Technical skills').fill('Java, Spring Boot, SQL, Docker');
+  await page.getByLabel('Soft skills').fill('Teamwork');
+  await page.getByLabel(/Projects, leadership/).fill('Built a Spring Boot REST API for a campus marketplace used by 300 students.');
+  await page.getByLabel(/roles are you interested/).fill('Backend developer');
   await page.getByRole('button', { name: 'Startup' }).click();
-  await page.getByLabel(/year of study/).fill('Third year Computer Science at University of Calgary');
-  await page.getByLabel(/Describe a project/).fill('Built a Spring Boot REST API for a campus marketplace used by 300 students.');
   await page.getByRole('button', { name: 'Local', exact: true }).click();
+  await page.getByRole('button', { name: 'Internship or co-op' }).click();
   await page.getByRole('button', { name: 'Software' }).click();
   await page.getByRole('button', { name: 'Energy' }).click();
   await page.getByLabel('Your city').fill('Calgary, AB');
