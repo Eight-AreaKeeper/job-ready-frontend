@@ -110,6 +110,12 @@ test('student: register, questionnaire, profile, resume, jobs, apply, events, in
     const kinds = await page.locator('.event .tag:first-child').allTextContents();
     return kinds.length > 0 && kinds.every((k) => k === 'Workshop');
   }).toBe(true);
+  // Register for an event: stays on the page and confirms underneath
+  const firstEvent = page.locator('.event').first();
+  await firstEvent.getByRole('button', { name: 'Register' }).click();
+  await expect(page).toHaveURL(/\/events/);
+  await expect(firstEvent.getByRole('status')).toHaveText(/Registered successfully/);
+  await expect(firstEvent.getByRole('button', { name: 'Registered' })).toBeDisabled();
   // Soonest first
   const days = await page.locator('.event .date-block').evaluateAll((els) => els.map((e) => e.textContent));
   expect(days.length).toBeGreaterThan(0);

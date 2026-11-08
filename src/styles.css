@@ -204,3 +204,6 @@ legend { font-size: 14px; font-weight: 600; color: var(--plum); margin-bottom: 8
 
 /* Mentor dashboard: the mentor's own card, shown in full at the top. */
 .mentor-profile { display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start; }
+
+/* Event registration confirmation */
+.registered { margin: 4px 0 0; padding: 8px 12px; border-radius: 8px; background: var(--ok-bg); color: var(--ok); font-size: 14px; font-weight: 600; }
