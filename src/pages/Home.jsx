@@ -1,5 +1,4 @@
-import { Link, Navigate } from 'react-router-dom';
-import { homeFor } from '../format.js';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../auth.jsx';
 import { ArrowOut } from '../components/ui.jsx';
 
@@ -16,8 +15,6 @@ const FEATURES = [
 
 export default function Home() {
   const { user } = useAuth();
-  // The landing page is only for visitors who have not signed in.
-  if (user) return <Navigate to={homeFor(user)} replace />;
   const startStudent = user ? (user.role === 'mentor' ? '/mentor/dashboard' : '/profile/setup') : '/signin?role=student';
   const startMentor = user ? (user.role === 'mentor' ? '/mentor/signup' : '/mentors') : '/signin?role=mentor';
   return (

@@ -68,9 +68,3 @@ export function toOffsetIso(d) {
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}:00` +
     `${sign}${pad(Math.trunc(off / 60))}:${pad(off % 60)}`;
 }
-
-/** Where a signed-in user lands: mentors on their dashboard, students on recommendations. */
-export function homeFor(user) {
-  if (!user) return '/';
-  return user.role === 'mentor' ? '/mentor/dashboard' : '/opportunities/recommended';
-}
