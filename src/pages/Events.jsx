@@ -15,7 +15,7 @@ export default function Events() {
   const [kind, setKind] = useState('');
   useEffect(() => { const t = setTimeout(() => setQuery(q.trim()), 300); return () => clearTimeout(t); }, [q]);
   const res = useLoad(() => api.events({ q: query, format, kind, limit: 50 }), [query, format, kind]);
-  const { isRegistered, register } = useEventRegistrations();
+  const { isRegistered, toggle } = useEventRegistrations();
 
   return (
     <>
@@ -54,9 +54,7 @@ export default function Events() {
                     {isRegistered(e.id) && <p role="status" className="registered">✓ Registered successfully. See you there!</p>}
                   </div>
                   <div className="event-actions">
-                    {isRegistered(e.id)
-                      ? <button type="button" className="btn small" disabled>Registered</button>
-                      : <button type="button" className="btn small" onClick={() => register(e.id)}>Register</button>}
+                    <button type="button" className={isRegistered(e.id) ? 'btn outline small' : 'btn small'} aria-pressed={isRegistered(e.id)} title={isRegistered(e.id) ? 'Click to cancel your registration' : undefined} onClick={() => toggle(e.id)}>{isRegistered(e.id) ? 'Registered ✓' : 'Register'}</button>
                     <Link to={`/events/${e.id}`} className="btn ghost small">View</Link>
                   </div>
                 </article>

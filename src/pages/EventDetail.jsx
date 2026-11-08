@@ -8,7 +8,7 @@ import { fmtDate, fmtTime, KIND_LABELS } from '../format.js';
 export default function EventDetail() {
   const { id } = useParams();
   const res = useLoad(() => api.event(id), [id]);
-  const { isRegistered, register } = useEventRegistrations();
+  const { isRegistered, toggle } = useEventRegistrations();
 
   if (res.loading) return <main className="page"><Loading /></main>;
   if (res.error) return <main className="page"><ErrorBox error={res.error} /><Link to="/events">← Back to events</Link></main>;
@@ -39,9 +39,7 @@ export default function EventDetail() {
           <div><div className="muted" style={{ fontSize: 13 }}>Date</div><strong>{fmtDate(e.startsAt, { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}</strong></div>
           <div><div className="muted" style={{ fontSize: 13 }}>Time</div><strong>{fmtTime(e.startsAt)}{e.endsAt ? ` – ${fmtTime(e.endsAt)}` : ''}</strong></div>
           <div><div className="muted" style={{ fontSize: 13 }}>Where</div><strong>{where}</strong></div>
-          {done
-            ? <button type="button" className="btn" disabled>Registered</button>
-            : <button type="button" className="btn" onClick={() => register(e.id)}>Register</button>}
+          <button type="button" className={done ? 'btn outline' : 'btn'} aria-pressed={done} title={done ? 'Click to cancel your registration' : undefined} onClick={() => toggle(e.id)}>{done ? 'Registered ✓' : 'Register'}</button>
           {done && <p role="status" className="registered">✓ Registered successfully. See you there!</p>}
         </aside>
       </main>

@@ -115,13 +115,19 @@ test('student: register, questionnaire, profile, resume, jobs, apply, events, in
   await firstEvent.getByRole('button', { name: 'Register' }).click();
   await expect(page).toHaveURL(/\/events/);
   await expect(firstEvent.getByRole('status')).toHaveText(/Registered successfully/);
-  await expect(firstEvent.getByRole('button', { name: 'Registered' })).toBeDisabled();
+  await expect(firstEvent.getByRole('button', { name: /Registered/ })).toHaveAttribute('aria-pressed', 'true');
+  // Clicking Registered cancels; clicking again registers
+  await firstEvent.getByRole('button', { name: /Registered/ }).click();
+  await expect(firstEvent.getByRole('status')).toHaveCount(0);
+  await expect(firstEvent.getByRole('button', { name: 'Register', exact: true })).toBeVisible();
+  await firstEvent.getByRole('button', { name: 'Register', exact: true }).click();
+  await expect(firstEvent.getByRole('status')).toHaveText(/Registered successfully/);
   // View opens the event's own page, which knows it is registered
   const eventTitle = await firstEvent.locator('h2').textContent();
   await firstEvent.getByRole('link', { name: 'View' }).click();
   await expect(page).toHaveURL(/\/events\/[^/]+$/);
   await expect(page.getByRole('heading', { name: eventTitle })).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Registered' })).toBeDisabled();
+  await expect(page.getByRole('button', { name: /Registered/ })).toHaveAttribute('aria-pressed', 'true');
   await page.getByRole('link', { name: '← Back to events' }).click();
   await expect(page.locator('.event').first()).toBeVisible();
   // Soonest first

@@ -8,10 +8,13 @@ export function useEventRegistrations() {
   const [ids, setIds] = useState(() => {
     try { return JSON.parse(localStorage.getItem(key) || '[]'); } catch { return []; }
   });
-  function register(id) {
-    const next = [...new Set([...ids, id])];
+  function save(next) {
     setIds(next);
     try { localStorage.setItem(key, JSON.stringify(next)); } catch { /* private mode: keep it for this visit */ }
   }
-  return { isRegistered: (id) => ids.includes(id), register };
+  /** Register, or cancel when already registered. */
+  function toggle(id) {
+    save(ids.includes(id) ? ids.filter((x) => x !== id) : [...ids, id]);
+  }
+  return { isRegistered: (id) => ids.includes(id), toggle };
 }
