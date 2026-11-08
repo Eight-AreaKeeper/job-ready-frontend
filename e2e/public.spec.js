@@ -27,8 +27,10 @@ test('wrong password shows an error; test student signs in to recommendations', 
   await expect(page).toHaveURL(/\/opportunities\/recommended/);
   await expect(page.locator('.ring').first()).toBeVisible();
   await expect(page.getByRole('link', { name: 'My profile' })).toContainText('Maya');
-  // The logo always goes back to the landing page, signed in or not.
+  // Signed in: the logo and the landing page both lead to recommendations.
+  await page.getByRole('link', { name: 'About us' }).click();
   await page.getByRole('link', { name: 'Job Ready home' }).click();
-  await expect(page).toHaveURL(/\/$/);
-  await expect(page.getByRole('heading', { name: /Make your career ambitions/ })).toBeVisible();
+  await expect(page).toHaveURL(/\/opportunities\/recommended/);
+  await page.goto('/');
+  await expect(page).toHaveURL(/\/opportunities\/recommended/);
 });

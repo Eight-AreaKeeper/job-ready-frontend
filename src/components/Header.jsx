@@ -1,4 +1,5 @@
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { homeFor } from '../format.js';
 import { useAuth } from '../auth.jsx';
 import { Avatar, Sparkle } from './ui.jsx';
 
@@ -9,7 +10,7 @@ export default function Header() {
   const meLink = user && (user.role === 'mentor' ? '/mentor/dashboard' : '/profile');
   return (
     <header className="site-header">
-      <Link to="/" className="logo" aria-label="Job Ready home">Job <span>Ready</span><Sparkle /></Link>
+      <Link to={homeFor(user)} className="logo" aria-label="Job Ready home">Job <span>Ready</span><Sparkle /></Link>
       <nav aria-label="Main" className="main-nav">
         <NavLink to="/about">About us</NavLink>
         {user?.role === 'mentor' ? (
