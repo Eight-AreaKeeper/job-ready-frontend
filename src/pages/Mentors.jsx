@@ -23,6 +23,9 @@ export default function Mentors() {
   useEffect(() => { const t = setTimeout(() => setQuery(q.trim()), 300); return () => clearTimeout(t); }, [q]);
   const res = useLoad(() => api.mentors({ q: query, industry }), [query, industry]);
   const student = user?.role === 'student';
+  // A mentor who signed up but has not made a card yet is asked to finish it.
+  const mine = useLoad(() => (user?.role === 'mentor' ? api.mentors() : Promise.resolve(null)), [user?.id]);
+  const needsCard = user?.role === 'mentor' && mine.data && !mine.data.items.some((m) => m.userId === user.id);
 
   return (
     <main className="page" style={{ maxWidth: 1100, gap: 24 }}>
@@ -50,10 +53,10 @@ export default function Mentors() {
           </article>
         ))}
       </div>
-      {user?.role !== 'student' && (
+      {needsCard && (
         <section className="card tint row between">
-          <div><h2 style={{ fontSize: 22 }}>Are you a professional?</h2><p className="muted" style={{ marginTop: 4 }}>Share 20 minutes of your experience with someone starting out.</p></div>
-          <Link to={user ? '/mentor/signup' : '/signin?role=mentor'} className="btn">Become a mentor</Link>
+          <div><h2 style={{ fontSize: 22 }}>Your mentor card is not finished</h2><p className="muted" style={{ marginTop: 4 }}>Students can only find you once your card is filled in.</p></div>
+          <Link to="/mentor/signup" className="btn">Finish up your mentor card</Link>
         </section>
       )}
     </main>

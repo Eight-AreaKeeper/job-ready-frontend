@@ -201,3 +201,6 @@ legend { font-size: 14px; font-weight: 600; color: var(--plum); margin-bottom: 8
 .q-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); gap: 16px; }
 .field input[readonly] { background: var(--tint); color: var(--muted); }
 @media (max-width: 560px) { .q-band { padding: 22px 20px; } .q-band + .stack { padding: 0 20px 24px !important; } }
+
+/* Mentor dashboard: the mentor's own card, shown in full at the top. */
+.mentor-profile { display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start; }

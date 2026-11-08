@@ -20,6 +20,14 @@ test('mentor card, coffee chat request, accept, complete, points', async ({ brow
   await expect(mp).toHaveURL(/\/mentor\/dashboard/);
   await expect(mp.getByRole('heading', { name: /Welcome back, Jordan/ })).toBeVisible();
   await expect(mp.getByText('Experience:')).toBeVisible();
+  // Mentors get Dashboard in the menu instead of Mentors, and see their own card on it
+  const nav = mp.getByRole('navigation', { name: 'Main' });
+  await expect(nav.getByRole('link')).toHaveText(['About us', 'Resume', 'Opportunities', 'Dashboard']);
+  await expect(mp.getByRole('region', { name: 'My mentor profile' })).toContainText('Senior Data Engineer');
+  await expect(mp.getByRole('link', { name: 'Edit my card' })).toBeVisible();
+  await mp.goto('/mentors');
+  await expect(mp.getByText('Finish up your mentor card')).toHaveCount(0);
+  await mp.goto('/mentor/dashboard');
   await expect(mp.locator('.stat').first()).toContainText('0');
 
   // Mentors see Opportunities exactly as students do

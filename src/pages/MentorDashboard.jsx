@@ -62,7 +62,7 @@ export default function MentorDashboard() {
         <div className="empty stack" style={{ alignItems: 'center' }}>
           <h1 style={{ fontSize: 26 }}>Welcome, {user.name.split(' ')[0]}</h1>
           <p>Fill in your mentor card so students can find you.</p>
-          <Link to="/mentor/signup" className="btn">Make my mentor card</Link>
+          <Link to="/mentor/signup" className="btn">Finish up your mentor card</Link>
         </div>
       </main>
     );
@@ -92,8 +92,23 @@ export default function MentorDashboard() {
           </div>
         </div>
       </section>
-      <main className="page split">
+      <main className="page">
         <div className="grow stack" style={{ gap: 28 }}>
+          <section className="card tint mentor-profile" aria-label="My mentor profile">
+            <Avatar name={card.name} photo={card.photoUrl} size={96} />
+            <div className="stack" style={{ gap: 8, flex: '1 1 320px', minWidth: 0 }}>
+              <div>
+                <h2 style={{ fontSize: 24 }}>{card.name}</h2>
+                <div className="muted">{[card.headline, card.company].filter(Boolean).join(' · ')}</div>
+              </div>
+              {card.industries?.length > 0 && <div className="chips" style={{ gap: 6 }}>{card.industries.map((i) => <span key={i} className="tag">{i}</span>)}</div>}
+              <div style={{ fontSize: 14 }}><strong>Expertise:</strong> {card.expertise?.join(', ') || '—'}</div>
+              {card.yearsExperience != null && <div style={{ fontSize: 14 }}><strong>Experience:</strong> {card.yearsExperience} years</div>}
+              <div style={{ fontSize: 14 }}><strong>Available:</strong> {fmtAvailability(card.availability)}</div>
+              <div style={{ fontSize: 14 }}><strong>Max chats per week:</strong> {card.maxChatsPerWeek}</div>
+            </div>
+            <Link to="/mentor/signup" className="btn outline small" style={{ alignSelf: 'flex-start' }}>Edit my card</Link>
+          </section>
           <ErrorBox error={error} />
           <section className="stack">
             <h2 style={{ fontSize: 22 }}>New requests ({pending.length})</h2>
@@ -116,15 +131,6 @@ export default function MentorDashboard() {
             </section>
           )}
         </div>
-        <aside className="side card tint stack" style={{ gap: 10 }}>
-          <h2 style={{ fontSize: 18 }}>Your mentor card</h2>
-          <div className="row"><Avatar name={card.name} photo={card.photoUrl} size={52} /><div><strong>{card.name}</strong><div className="muted" style={{ fontSize: 14 }}>{[card.headline, card.company].filter(Boolean).join(' · ')}</div></div></div>
-          <div style={{ fontSize: 14 }}><strong>Expertise:</strong> {card.expertise?.join(', ') || '—'}</div>
-          {card.yearsExperience != null && <div style={{ fontSize: 14 }}><strong>Experience:</strong> {card.yearsExperience} years</div>}
-          <div style={{ fontSize: 14 }}><strong>Available:</strong> {fmtAvailability(card.availability)}</div>
-          <div style={{ fontSize: 14 }}><strong>Max chats per week:</strong> {card.maxChatsPerWeek}</div>
-          <Link to="/mentor/signup" className="btn outline small" style={{ alignSelf: 'flex-start' }}>Edit my card</Link>
-        </aside>
       </main>
     </>
   );
