@@ -1,5 +1,4 @@
 import { Link, NavLink } from 'react-router-dom';
-import { useAuth } from '../auth.jsx';
 import { cap, fmtDate } from '../format.js';
 import { ArrowOut } from './ui.jsx';
 
@@ -18,10 +17,8 @@ export function OppBand({ active }) {
   );
 }
 
-/** Browse all / Recommended for you (students only). */
+/** Browse all / Recommended for you. */
 export function JobTabs() {
-  const { user } = useAuth();
-  if (user?.role !== 'student') return null;
   return (
     <div role="tablist" className="tabs">
       <NavLink end role="tab" to="/opportunities" className={({ isActive }) => (isActive ? 'on' : '')}>Browse all</NavLink>
@@ -40,14 +37,13 @@ export function OppTags({ o }) {
   );
 }
 
-/** View details + Apply buttons. Apply is only for students. */
+/** View details + Apply buttons. */
 export function OppActions({ o, match }) {
-  const { user } = useAuth();
   return (
     <div className="opp-side">
       <span className="faint">Due <strong style={{ color: 'var(--ink)' }}>{fmtDate(o.deadline, { month: 'short', day: 'numeric', year: 'numeric' })}</strong></span>
       <Link to={`/opportunities/${o.id}`} state={match ? { match } : undefined} className="btn ghost small">View details</Link>
-      {user?.role === 'student' && <Link to={`/opportunities/${o.id}/apply`} className="btn small">Apply <ArrowOut /></Link>}
+      <Link to={`/opportunities/${o.id}/apply`} className="btn small">Apply <ArrowOut /></Link>
     </div>
   );
 }

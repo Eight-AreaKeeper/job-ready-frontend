@@ -1,6 +1,5 @@
 import { Link, useLocation, useParams } from 'react-router-dom';
 import { api } from '../api.js';
-import { useAuth } from '../auth.jsx';
 import { ErrorBox, Loading, useLoad } from '../components/ui.jsx';
 import { cap, daysUntil, fmtDate } from '../format.js';
 
@@ -9,13 +8,11 @@ const Missing = () => <svg role="img" aria-label="Missing" width="20" height="20
 
 export default function OpportunityDetail() {
   const { id } = useParams();
-  const { user } = useAuth();
   const match = useLocation().state?.match;
-  const student = user?.role === 'student';
   const res = useLoad(async () => {
     const [opp, profile] = await Promise.all([
       api.opportunity(id),
-      student ? api.getProfile().catch(() => null) : Promise.resolve(null),
+      api.getProfile().catch(() => null),
     ]);
     return { opp, profile };
   }, [id]);
@@ -72,9 +69,9 @@ export default function OpportunityDetail() {
         <aside className="side card stack" style={{ alignItems: 'stretch', textAlign: 'center' }}>
           <p className="muted">{days >= 0 ? 'Closes in' : 'Closed'}</p>
           <p style={{ fontFamily: 'var(--head)', fontSize: 34, fontWeight: 700, color: 'var(--plum)' }}>{days >= 0 ? `${days} day${days === 1 ? '' : 's'}` : fmtDate(o.deadline)}</p>
-          {student && <Link to={`/opportunities/${o.id}/apply`} className="btn">Apply</Link>}
-          {student && <Link to={`/interview?opportunityId=${o.id}`} className="btn outline">Practice an interview</Link>}
-          {!student && o.url && <a href={o.url} target="_blank" rel="noreferrer" className="btn outline">Company page</a>}
+          <Link to={`/opportunities/${o.id}/apply`} className="btn">Apply</Link>
+          <Link to={`/interview?opportunityId=${o.id}`} className="btn outline">Practice an interview</Link>
+          {o.url && <a href={o.url} target="_blank" rel="noreferrer" className="btn outline">Company page</a>}
         </aside>
       </main>
     </>

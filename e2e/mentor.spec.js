@@ -22,6 +22,18 @@ test('mentor card, coffee chat request, accept, complete, points', async ({ brow
   await expect(mp.getByText('Experience:')).toBeVisible();
   await expect(mp.locator('.stat').first()).toContainText('0');
 
+  // Mentors see Opportunities exactly as students do
+  await mp.getByRole('link', { name: 'Opportunities' }).click();
+  await expect(mp.getByRole('tab', { name: 'Browse all' })).toBeVisible();
+  await expect(mp.getByRole('tab', { name: 'Recommended for you' })).toBeVisible();
+  await expect(mp.getByRole('link', { name: /^Apply/ }).first()).toBeVisible();
+  await mp.getByRole('link', { name: 'View details' }).first().click();
+  await expect(mp.getByRole('link', { name: 'Apply', exact: true })).toBeVisible();
+  await expect(mp.getByRole('link', { name: 'Practice an interview' })).toBeVisible();
+  await mp.goto('/opportunities/recommended');
+  await expect(mp).toHaveURL(/\/opportunities\/recommended/);
+  await mp.goto('/mentor/dashboard');
+
   // Student finds the mentor and requests a chat with an AI-drafted message
   const studentCtx = await browser.newContext();
   const sp = await studentCtx.newPage();
